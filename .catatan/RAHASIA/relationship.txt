@@ -1,0 +1,22 @@
+=== one to one ===
+public function category()
+{
+    return $this->belongsTo(Category::class, 'category_id', 'id');
+}
+
+== one to one
+public function category()
+{
+    return $this->hasOne(NamaModel::class);
+}
+
+=== one to many
+public function category()
+{
+    return $this->hasMany(NamaModel::class);
+}
+public function category()
+{
+    return $this->hasOne(NamaModel::class);
+}
+

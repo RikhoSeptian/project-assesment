@@ -1,0 +1,153 @@
+// Membuat Route-link
+<router-link to="/products/create" class="nav-link text-white" style="text-decoration: none; color: white;">Add Product</router-link>
+
+// Membuat form
+<form @submit.prevent="submitForm">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input class="form-control" type="text" id="name" v-model="product.name" required />
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description:</label>
+            <textarea class="form-control" id="description" v-model="product.description" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label">Price:</label>
+            <input class="form-control" type="number" id="price" v-model="product.price" required />
+          </div>
+          <button type="submit" v-if="isNewProduct" class="btn btn-primary">Add Product</button>
+          <button type="submit" v-else class="btn btn-primary">Update Product</button>
+        </form>
+
+// Membuat tabel
+<table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Slug</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr v-for="product in products" :key="product.id">
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.description }}</td>
+                    <td>{{ product.slug }}</td>
+                    <td>
+                      <div class="row gap-3">
+                        <router-link :to="`/products/${product.id}`" class="p-2 col border btn btn-primary">View</router-link>
+                        <router-link :to="`/products/${product.id}/edit`" class="p-2 col border btn btn-success">Edit</router-link>
+                        <button @click="deleteProduct(product.id)" type="button" class="p-2 col border btn btn-danger">Delete</button>
+                      </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+// Menampilkan Data
+<div>
+        <h5 id="associating-form-text-with-form-controls">Name:</h5>
+        <h6>{{ product.name }}</h6>
+        <h5 id="associating-form-text-with-form-controls">Description:</h5>
+        <p>{{ product.description }}</p>
+        <h5 id="associating-form-text-with-form-controls">Slug:</h5>
+        <p>Price: {{ product.slug }}</p>
+        <router-link :to="`/products/${product.id}/edit`" class="btn btn-primary">Edit</router-link>
+    </div>
+
+// Membuat function index
+<script>
+import axios from 'axios';
+
+export default {
+    data() {
+        return {
+        product: {}
+        }
+    },
+    async created() {
+        try {
+        const response = await axios.get(`/api/products/${this.$route.params.id}`);
+        this.product = response.data;
+        } catch (error) {
+        console.error(error);
+        }
+    }
+}
+</script>
+
+// Membuat function create 
+<script>
+  import axios from 'axios';
+  
+  export default {
+    data() {
+      return {
+        product: {
+          name: '',
+          description: '',
+          price: 0
+        }
+      }
+    },
+    computed: {
+      isNewProduct() {
+        return !this.$route.path.includes('edit');
+      }
+    },
+    async created() {
+      if (!this.isNewProduct) {
+        const response = await axios.get(`/api/products/${this.$route.params.id}`);
+        this.product = response.data;
+      }
+    },
+    methods: {
+      async submitForm() {
+        try {
+          if (this.isNewProduct) {
+            await axios.post('/api/products', this.product);
+          } else {
+            await axios.put(`/api/products/${this.$route.params.id}`, this.product);
+          }
+          this.$router.push('/');
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+  }
+  </script>
+
+  // Menampilkan data + edit
+  <script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      products: []
+    }
+  },
+  async created() {
+    try {
+      const response = await axios.get('/api/products');
+      this.products = response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  methods: {
+    async deleteProduct(id) {
+      try {
+        await axios.delete(`/api/products/${id}`);
+        this.products = this.products.filter(product => product.id !== id);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+}
+</script>

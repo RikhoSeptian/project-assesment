@@ -1,0 +1,34 @@
+Menyimpan semua perubahan
+$ git add .
+Menyimpan satu persatu
+$ git add (modifined)
+
+Commit
+$ git commit -m "Keterangan"
+
+Mengrim perubahan ke github
+$ git push
+
+cek branch
+$ git branch
+
+Menambah branch
+$ git branch (nama.branch)
+
+Pull master ke branch baru
+$ git mergen (nama.branch)
+
+cek akun github
+$ git config --list
+
+memasukan akun github lewat terminal
+$ git config --global user.name "nama username"
+$ git config --global user.email "email github"
+
+graph
+$ alias graph="--all --decorate --oneline --graph"
+
+menghapus branch
+$ git branch -d (nama.branch)
+
+

@@ -1,0 +1,119 @@
+Membuat CRUD.
+Yang pertama yaitu membuat tampilan form terlebih dahulu.
+
+// membuat route API
+Route::resource('products', ApiController::class);
+
+
+// Membuat route untuk menampilkan form || dengan cara tunggal
+Route::get('/mahasiswa', [NamaController::class, 'index']);
+
+
+// Membuat route dengan prefix + middleware + group
+Route::prefix('admin')->middleware(['auth', 'Admin'])->group(function () {
+
+    // Membuat route dengan cara group + controller
+    Route::controller(App\Http\Controllers\NamaController::class)->group(function () {
+        Route::get('/url', 'index');
+        Route::get('/url/create', 'create');
+        Route::post('/url/create', 'store');
+        Route::get('/url/{id}/edit', 'edit');
+        Route::put('/url/{id}', 'update');
+        Route::get('/url/{id}/delete', 'destroy');
+    });
+
+});
+
+lalu buat file controller dan buat function
+
+// Membuat function data
+public function index() {
+    $product = Product::all();
+    return view('view.home', compact('product'));
+}
+
+
+setelah berhasil menampilkan form dan bisa input data, ketika di submit atau di simpan akan error.
+yang di dalam error tersebut kita di perintahkan untuk membuat function create.
+
+// Membuat function create
+public function create(Request $request){
+	$request->validate([
+            'nama_product' => 'required',
+            'code_product' => 'required|numeric',
+            'price' => 'required',
+            'stock' => 'required',
+        ], [
+            'nama_product' => 'Harus Di Isi',
+            'code_product' => 'Harus Di Isi',
+            'code_product' => 'Data Sudah Ada',
+            'price' => 'Masukan Harga',
+            'stock' => 'Masukan Stock',
+        ]);
+
+        $data = [
+            'nama_product' => $request->input('nama_product'),
+            'code_product' => $request->input('code_product'),
+            'price' => $request->input('price'),
+            'stock' => $request->input('stock')
+        ];
+
+        ProductModel::create($data);
+
+        return redirect('home')->with('massage', 'Product added successfully');
+}
+
+// Menampilkan error
+@if($errors->any())
+	<ul> 
+		@foreach($errors->all() as $error)
+			<li>{{$error}}</li>
+		@endforeach
+	</ul>
+@endif
+
+Setelah membuat function crate dan berjalan dengan baik makan selanjut nya kita membuat function edit.
+
+pertama yang harus kita buat adalah form untuk menampilkan data yang akan di edit.
+untuk menampilkan form dan data yang akan di edit, kita harus memanggil file edit dengan cara
+membuat url yang mengarah ke file edit.
+
+// membuat url edit
+Route('product.edit', '$data->id')
+
+// membuat function edit
+publict function edit($id){
+	$namaVariabel = namaFileModel::find($idYangDipanggil);
+	return view('file.edit', compact('$namaVariabel'));
+}
+
+Copy file createProduct, lalu ubah judul, route.
+Tambahkan bagian form nya @method('PUT').
+lalu tambahkan di dalam input yaitu value dengan data yang akan di panggil. value="{{ $product->namaProduct }}"
+
+setelah membuat file untuk menampilkan data yang di edit ketika di testing akan memunculkan error.
+yang di dalam nya ada perintah untuk membuat function update.
+
+// Membuat function update
+public function update($id, Request $request) {
+	$namaVariabel = namaModelsProduct::find($idYangDipanggil);
+	$namaVariabel->namaTableDatabase = $request->mengambilNilaiDatabase;
+	$product->save();
+	return redirect('/product')->with('success', 'Data Produk berhasil');
+}
+
+Sesudah membuat function update maka lanjut tes function tersebut.
+maka jika function berjalan dengan sempurna maka data yang di update akan langsung di masukan ke dalam database
+
+// Menampilkan Pesan Success
+@if(session()->has('success'))
+	<h3>{{ session('seccess') }}</h3>
+@endif
+
+
+
+
+
+
+
+
