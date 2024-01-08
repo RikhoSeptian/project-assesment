@@ -32,21 +32,24 @@
                                     <tr>
                                         <td>{{ $mhs->id }}</td>
                                         <td>{{ $mhs->name }}</td>
-                                        <td>{{ $mhs->nip }}</td>
-                                        <td>{{ $mhs->matkul->name }}</td>
-                                        <td>{{ $mhs->status == '1' ? 'Hidden' : 'Visible' }}</td>
+                                        <td>{{ $mhs->nim }}</td>
+                                        <td>{{ ($mhs->Prodis != null) ? $mhs->Prodis->name : '' }}
+                                            {{  $mhs->prodi_id }}
+                                        </td>
+                                        <td>{{ $mhs->status == '1' ? 'Hidden' : 'Visible' }}
+                                        </td>
                                         <td>
-                                            <a href="{{ url('admin/prodi/' . $mhs->id . '/edit') }}"
+                                            <a href="{{ url('admin/mahasiswa/' . $mhs->id . '/edit') }}"
                                                 class="btn btn-success">Edit</a>
-                                            <a href="{{ url('admin/prodi/'.$mhs->id.'/delete')}}" onclick="return confirm('Are you sure, you want to delete this data?')" class="btn btn-sm btn-danger">Delete</a>
+                                            <a href="{{ url('admin/mahasiswa/'.$mhs->id.'/delete')}}" onclick="return confirm('Are you sure, you want to delete this data?')" class="btn btn-sm btn-danger">Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                        <div>
-                            {{ $dosens->links() }}
-                        </div>
+                        {{-- <div>
+                            {{ $mhs->links() }}
+                        </div> --}}
                     </div>
                 </div>
             </div>

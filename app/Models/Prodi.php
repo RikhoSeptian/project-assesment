@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use App\Models\Product;
+use App\Models\Mahasiswa;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,10 +17,10 @@ class Prodi extends Model
         'status',
     ];
 
-    // public function products()
-    // {
-    //     return $this->hasMany(Product::class, 'category_id', 'id');
-    // }
+    public function mahasiswas()
+    {
+        return $this->hasMany(Mahasiswa::class);
+    }
 
     // public function brands()
     // {

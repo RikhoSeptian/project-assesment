@@ -8,33 +8,36 @@ use App\Models\Prodi;
 use App\Http\Requests\MahasiswaFormRequest;
 use Illuminate\Http\Request;
 
-class DosenController extends Controller
+class MahasiswaController extends Controller
 {
     public function index()
     {
-        $mahasiswa = Mahasiswa::with('matkul')->paginate(5);
+        $mahasiswa = Mahasiswa::with('Prodis')->paginate(5);
         return view('admin.mahasiswa.index', ['mahasiswa' => $mahasiswa]);
     }
 
     public function create()
     {
-        $mahasiswa = Mahasiswa::all();
-        return view('admin.mahasiswa.create', compact('mahasiswa'));
+        $prodi = Prodi::where('status','0')->get();
+        return view('admin.mahasiswa.create', compact('prodi'));
     }
 
     public function store(MahasiswaFormRequest $request)
     {
         $validateData = $request->validated();
 
-        $category = Prodi::findOrFail($validateData['matkul_id']);
-        $product = $category->products()->create([
-            'matkul_id' => $validateData['matkul_id'],
+        Mahasiswa::create([
             'name' => $validateData['name'],
-            'nip' => $validateData['nip'],
-            'status' => $request->status == true ? '1':'0',
+            'nim' => $validateData['nim'],
+            'prodi_id' => $validateData['prodi_id'],
         ]);
 
-        return redirect('admin/dosen')->with('message', 'Dosen added successfully');
+        // if ($validateData = Mahasiswa::create($request)) {
+        //     $validateData->Prodi()->sync($request['prodi_id']);
+
+        //     return redirect('admin/dosen')->with('message', 'Dosen added successfully');
+        // }
+        return redirect('admin/mahasiswa')->with('message', 'Dosen added successfully');
     }
 
     public function edit($id)
@@ -60,6 +63,6 @@ class DosenController extends Controller
     {
         $dosen = Mahasiswa::find($id);
         $dosen->delete();
-        return redirect('admin/Mahasiswa')->with('message', 'Data berhasil dihapus');
+        return redirect('admin/mahasiswa')->with('message', 'Data berhasil dihapus');
     }
 }

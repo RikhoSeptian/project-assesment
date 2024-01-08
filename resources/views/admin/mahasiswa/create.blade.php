@@ -26,10 +26,10 @@
                             @error('nim') <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
                         <div class="mb-3">
-                            <label for="">Select Category</label>
-                            <select name="matkul_id" class="form-control">
+                            <label for="">Select Prodi</label>
+                            <select name="prodi_id" class="form-control">
                                 @foreach ($prodi as $p)
-                                <option value="{{ $p->id}}">{{ $p->name }}</option>
+                                <option value="{{ $p->id }}" @selected(old('prodi_id') == $p)>{{ $p->name }}</option>
                                 @endforeach
                             </select>
                         </div>

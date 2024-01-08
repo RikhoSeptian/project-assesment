@@ -53,7 +53,7 @@ Route::prefix('admin')->middleware(['auth', 'role'])->group(function () {
         Route::get('/matkul/{id}/delete', 'destroy');
     });
 
-    Route::controller(App\Http\Controllers\Admin\MatkulController::class)->group(function () {
+    Route::controller(App\Http\Controllers\Admin\MahasiswaController::class)->group(function () {
         Route::get('/mahasiswa', 'index');
         Route::get('/mahasiswa/create', 'create');
         Route::post('/mahasiswa/add', 'store');

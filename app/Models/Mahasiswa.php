@@ -4,22 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Matkul;
+use App\Models\Prodi;
 
 
-class Dosen extends Model
+class Mahasiswa extends Model
 {
     use HasFactory;
 
-     protected $table = 'mahasiswa';
+    protected $table = 'mahasiswa';
 
-    // protected $fillablel = [
-    //     'name',
-    //     'nip',
-    // ];
+    protected $fillable = [
+        'name',
+        'nim',
+        'prodi_id'
+    ];
 
-    public function prodi()
+
+    public function Prodis()
     {
-        return $this->hasMany(prodi::class);
+        return $this->belongsTo(Prodi::class);
     }
 }
